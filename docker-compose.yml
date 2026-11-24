@@ -1,0 +1,14 @@
+# Run with: docker compose up -d   (reads secrets from your .env file)
+services:
+  chatbot:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+    volumes:
+      - chatbot-data:/data
+    restart: unless-stopped
+volumes:
+  chatbot-data:

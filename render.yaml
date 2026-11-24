@@ -1,0 +1,27 @@
+# One-click deploy on Render (https://render.com): New > Blueprint > pick this repo.
+# Render asks for the secret values (marked sync: false) during setup.
+services:
+  - type: web
+    name: chatbot-platform
+    runtime: node
+    plan: starter            # a paid plan is needed for the persistent disk below
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: "true"
+      - key: DATA_DIR
+        value: /var/data
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+    disk:
+      name: chatbot-data
+      mountPath: /var/data
+      sizeGB: 1
